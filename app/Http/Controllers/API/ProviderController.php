@@ -4,9 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\APIController;
 use App\Models\User;
-use App\Models\Client;
-use App\Models\Product;
-use App\Models\Storage;
+use App\Models\ProviderCategory;
+use App\Models\Category;
+use App\Models\Provider;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,13 +16,13 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
-class StorageController extends APIController
+class ProviderController extends APIController
 {
 
     public function index()
     {
-        $storages = Storage::get(['id', 'name']);
-        return $this->successResponse($storages);
+        $providers = Provider::get(['id', 'name']);
+        return $this->successResponse($providers);
     }
 
     public function store(Request $request)
@@ -30,14 +30,25 @@ class StorageController extends APIController
         $data = $request->all();
         $validator = Validator::make($data, [
             'name' => 'required|max:255',
+            'categories' => 'required|array',
         ]);
 
         if ($validator->fails()) {
             return $this->errorResponse($validator->errors());
         }
 
-        if ($storage = Storage::create($data)) {
-            return $this->successResponse($storage, 'Record created.');
+        if (!empty($data['categories']) && $provider = Provider::create($data)) {
+
+            foreach ($data['categories'] as $cat_id) {
+                if (Category::where('id', $cat_id)->exists()) {
+                    ProviderCategory::create([
+                        'provider_id' => $provider->id,
+                        'category_id' => $cat_id,
+                    ]);
+                }
+            }
+
+            return $this->successResponse($provider, 'Record created.');
         }
 
         return $this->errorResponse('Error by saving data.');

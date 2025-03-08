@@ -6,6 +6,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\BatchController;
 use App\Http\Controllers\API\StorageController;
+use App\Http\Controllers\API\ProviderController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubcategoryController;
 use App\Http\Controllers\API\ClientController;
@@ -46,6 +47,12 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'storages', 'as' => 'storages.'], function() {
         Route::get('/', [StorageController::class, 'index'])->name('index');
         Route::post('/', [StorageController::class, 'store'])->name('create');
+    });
+
+    // providers
+    Route::group(['prefix' => 'providers', 'as' => 'providers.'], function() {
+        Route::get('/', [ProviderController::class, 'index'])->name('index');
+        Route::post('/', [ProviderController::class, 'store'])->name('create');
     });
 
     // categories
