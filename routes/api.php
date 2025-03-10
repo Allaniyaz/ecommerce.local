@@ -10,6 +10,8 @@ use App\Http\Controllers\API\ProviderController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubcategoryController;
 use App\Http\Controllers\API\ClientController;
+use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\API\RefundController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,16 +33,19 @@ Route::post('login', [UserController::class, 'login'])->name('login');
 Route::post('logout', [UserController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-    Route::get('/test', [UserController::class, 'test']);
+
     // products
-    Route::group(['prefix' => 'products', 'as' => 'product.'], function() {
+    Route::group(['prefix' => 'products', 'as' => 'products.'], function() {
         Route::get('/', [ProductController::class, 'index'])->name('index');
+        Route::post('/', [ProductController::class, 'store'])->name('create');
+        Route::get('/available', [ProductController::class, 'available'])->name('available');
     });
 
     // batches
     Route::group(['prefix' => 'batches', 'as' => 'batches.'], function() {
         Route::get('/', [BatchController::class, 'index'])->name('index');
         Route::post('/', [BatchController::class, 'store'])->name('create');
+        Route::get('/profit', [BatchController::class, 'profit'])->name('profit');
     });
 
     // storages
@@ -71,6 +76,18 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'clients', 'as' => 'clients.'], function() {
         Route::get('/', [ClientController::class, 'index'])->name('index');
         Route::post('/', [ClientController::class, 'store'])->name('create');
+    });
+
+    // orders
+    Route::group(['prefix' => 'orders', 'as' => 'orders.'], function() {
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::post('/', [OrderController::class, 'store'])->name('create');
+    });
+
+    // refunds
+    Route::group(['prefix' => 'refunds', 'as' => 'refunds.'], function() {
+        Route::get('/', [RefundController::class, 'index'])->name('index');
+        Route::post('/', [RefundController::class, 'store'])->name('create');
     });
 });
 
