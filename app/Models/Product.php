@@ -40,7 +40,8 @@ class Product extends Model
             ->withPivot([
                 'qty',
                 'price',
-                'storage_id'
+                'remain_qty',
+                'storage_id',
             ]);
     }
 
@@ -51,6 +52,11 @@ class Product extends Model
      */
     public function orders(): BelongsToMany
     {
-        return $this->belongsToMany(Order::class, 'order_product', 'product_id', 'order_id');
+        return $this->belongsToMany(Order::class, 'order_product', 'product_id', 'order_id')
+            ->withPivot([
+                'qty',
+                'price',
+                'is_refunded',
+            ]);
     }
 }

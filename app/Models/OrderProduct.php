@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 
 
@@ -19,6 +21,7 @@ class OrderProduct extends Model
         'product_id',
         'qty',
         'price',
+        'is_refunded',
     ];
 
     /**
@@ -39,5 +42,22 @@ class OrderProduct extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    /**
+     * Get all of the refunds for the Order
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function refunds(): HasMany
+    {
+        return $this->hasMany(Refund::class, 'order_id', 'id');
+    }
+
+    public function sold(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->qty * $this->price,
+        );
     }
 }
