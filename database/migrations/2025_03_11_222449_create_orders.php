@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->strin('name', 255)
+            $table->string('name', 255)
                 ->nullable();
             $table->foreignId('client_id')
                 ->constrained('clients')
