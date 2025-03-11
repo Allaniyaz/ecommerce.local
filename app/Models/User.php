@@ -51,15 +51,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    /**
-     * Get the client that owns the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function client(): HasOne
-    {
-        return $this->hasOne(Client::class);
-    }
 
     /**
      * The roles that belong to the User
@@ -88,18 +79,4 @@ class User extends Authenticatable
         return in_array($role_name, $roles);
     }
 
-    /**
-     * Get users who have the role client
-     *
-     * @return $clients
-     */
-    public static function getClients()
-    {
-        $clients = User::whereHas(
-            'roles',
-            fn ($query) => $query->where('name', 'client')
-        )
-        ->pluck('name', 'id');
-        return $clients;
-    }
 }

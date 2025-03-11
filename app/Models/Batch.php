@@ -20,9 +20,6 @@ class Batch extends Model
         'name',
         'provider_id',
         'storage_id',
-        // 'product_id',
-        // 'price',
-        // 'qty'
     ];
 
     public function provider(): BelongsTo

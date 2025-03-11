@@ -15,23 +15,9 @@ class Client extends Model
 {
     use HasFactory, Notifiable, SoftDeletes;
 
-    // protected $with = ['user'];
-
     protected $fillable = [
         'name',
         'info',
     ];
-
-    // /**
-    //  * Get the user associated with the Client
-    //  *
-    //  * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-    //  */
-    // public function user(): BelongsTo
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
-
-
 
 }
